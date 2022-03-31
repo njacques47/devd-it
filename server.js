@@ -28,12 +28,31 @@ const db = mysql.createConnection(
 // });
 
 // GET a single candidate's info
-db.query(`SELECT * FROM candidates WHERE id = 1`, (err, row) => {
+// db.query(`SELECT * FROM candidates WHERE id = 1`, (err, row) => {
+//   if (err) {
+//     console.log(err);
+//   }
+//   console.log(row);
+// });
+
+// DELETE a candidate (the ? denotes that it is a prepared statement and the ? is a placeholder)
+// db.query(`DELETE FROM candidates WHERE id = ?`, 1, (err, result) => {
+//   if (err) {
+//     console.log(err);
+//   }
+//   console.log(result);
+// });
+
+// CREATE a candidate
+const sql = `INSERT INTO candidates (id, first_name, last_name, industry_connected)
+  VALUES (?,?,?,?)`;
+const params = [1, 'Ronald', 'Firbank', 1];
+db.query(sql, params, (err, result) => {
   if (err) {
     console.log(err);
   }
-  console.log(row);
-});
+  console.log(result);
+})
 
 app.get('/', (req, res) => {
   res.json({
