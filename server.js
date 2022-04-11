@@ -167,6 +167,37 @@ app.delete('/api/party/:id', (req, res) => {
   });
 });
 
+// update a candidates's party
+app.put('/api/candidate/:id', (req, res) => {
+  const errors = inputCheck(req.body, 'party_id');
+
+if (errors) {
+  res.status(400).json({ error: errors });
+  return;
+}
+
+const sql = `UPDATE candidates SET party_id = ?
+    WHERE id = ?`;
+  const params = [req.body.party_id, req.params.id];
+  
+  db.query(sql, params, (err, result) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      // check if record was found
+    } else if (!result.affectedRows) {
+      res.json({
+        message: 'candidate not found'
+      });
+    } else {
+      res.json({
+        message: 'successfully changed affiliation',
+        data: req.body,
+        changes: result.affectedRows
+      });
+    }
+  });
+});
+
 app.get('/', (req, res) => {
   res.json({
     message: 'Hello World'
